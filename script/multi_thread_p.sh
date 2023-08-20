@@ -8,14 +8,14 @@ if [[ -z $nodeName ]];then
     exit 1;
 fi
 
-echo "请输入node id（请根据官方教程去查阅获取方式）："
+echo "请输入nodeId（请根据官方教程去查阅获取方式，提示：配置文件中可读取到）："
 read -r nodeId
 if [[ -z $nodeId ]];then
     echo "node id 不得为空";
     exit 1;
 fi
 
-echo "请输入commitment atx id（请根据官方教程去查阅获取方式）："
+echo "请输入AtxId（请根据官方教程去查阅获取方式，提示：需要rpc获取）："
 read -r commitmentAtxId
 if [[ -z $commitmentAtxId ]];then
     echo "commitment atx id 不得为空";
@@ -23,8 +23,8 @@ if [[ -z $commitmentAtxId ]];then
 fi
 
 echo "请输入数据存储位置（就是post_data位置，里面应该有两个文件，xx.json和key）："
-read -r commitmentAtxId
-if [[ -z $commitmentAtxId ]];then
+read -r datadir
+if [[ -z $datadir ]];then
     echo "数据存储位置不得为空";
     exit 1;
 fi
@@ -127,5 +127,5 @@ for ((gpuIndex=0; gpuIndex<numGpus; gpuIndex++)); do
     fromFile=$((gpuIndex * avgGpuNum-(gpuIndex+1-extentGpuNum-1)))
     toFile=$(( (gpuIndex + 1) * avgGpuNum - 1 -(gpuIndex+1-extentGpuNum)))
   fi
-  nohup postcli -provider gpuIndex -commitmentAtxId "$commitmentAtxId" -id "$nodeId" -numUnits $numUnits -maxFileSize=$maxFileSize -datadir "$datadir" -fromFile $fromFile -toFile $toFile >"$nodeName""_""$gpuIndex"".log" &
+  nohup ./postcli -provider=$((gpuIndex)) -commitmentAtxId="$commitmentAtxId" -id="$nodeId" -numUnits=$numUnits -maxFileSize=$maxFileSize -datadir="$datadir" -fromFile=$fromFile -toFile=$toFile >"$nodeName""_""$gpuIndex"".log" &
 done
